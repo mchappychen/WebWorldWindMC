@@ -17,8 +17,8 @@
 /**
  * Illustrates how to display and pick Placemarks.
  */
-requirejs(['./WorldWindShim',
-        './LayerManager'],
+requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
+        './LayerManager'],         //Makes the buttons on the left do something with the LayerManager object
     function (WorldWind,
               LayerManager) {
         "use strict";
@@ -32,16 +32,16 @@ requirejs(['./WorldWindShim',
         // Create and add layers to the WorldWindow.
         var layers = [
             // Imagery layers.
-            {layer: new WorldWind.BMNGLayer(), enabled: true},
-            {layer: new WorldWind.BMNGLandsatLayer(), enabled: false},
-            {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: true},
+            {layer: new WorldWind.BMNGLayer(), enabled: true},   //Blue Marble is just the earth's images from blurry satellite images during the Ice Age or something
+            {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: true},   //actual street-view satellite images
             // Add atmosphere layer on top of all base layers.
-            {layer: new WorldWind.AtmosphereLayer(), enabled: true},
+            {layer: new WorldWind.AtmosphereLayer(), enabled: true},   //just adds a glow
             // WorldWindow UI layers.
             {layer: new WorldWind.CompassLayer(), enabled: true},
             {layer: new WorldWind.CoordinatesDisplayLayer(wwd), enabled: true},
             {layer: new WorldWind.ViewControlsLayer(wwd), enabled: true}
         ];
+
 
         for (var l = 0; l < layers.length; l++) {
             layers[l].layer.enabled = layers[l].enabled;
@@ -73,7 +73,7 @@ requirejs(['./WorldWindShim',
             "castshadow-white.png"
         ];
 
-        var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/", // location of the image files
+        var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/", // location of the image files for the pins
             placemark,
             placemarkAttributes = new WorldWind.PlacemarkAttributes(null),
             highlightAttributes,
@@ -97,7 +97,7 @@ requirejs(['./WorldWindShim',
         // For each placemark image, create a placemark with a label.
         for (var i = 0, len = images.length; i < len; i++) {
             // Create the placemark and its label.
-            placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude + i, 1e2), true, null);
+            placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude + 10*i, 1e2), true, null);
             placemark.label = "Placemark " + i.toString() + "\n"
                 + "Lat " + placemark.position.latitude.toPrecision(4).toString() + "\n"
                 + "Lon " + placemark.position.longitude.toPrecision(5).toString();
@@ -162,7 +162,7 @@ requirejs(['./WorldWindShim',
                     // Applications might use this information to determine whether the user wants to edit the label
                     // or is merely picking the placemark as a whole.
                     if (pickList.objects[p].labelPicked) {
-                        console.log("Label picked");
+                        console.log("Mouse is over a placemark label");
                     }
                 }
             }
