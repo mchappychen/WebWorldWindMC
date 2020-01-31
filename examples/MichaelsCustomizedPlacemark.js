@@ -7,46 +7,33 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         // Create the WorldWindow.
         var wwd = new WorldWind.WorldWindow("canvasOne");
 
-        //Add the layers
+        //Add the default layers
         wwd.addLayer(new WorldWind.BingAerialWithLabelsLayer(null));
         wwd.addLayer(new WorldWind.AtmosphereLayer());
         wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
 
-        // Image for placemark
-        // https://i.imgur.com/f3d66UH.png
+        // Image for placemark: https://i.imgur.com/f3d66UH.png
 
-        //create layer for the placemark
+        //create the layer for the placemark
         var placemarkLayer = new WorldWind.RenderableLayer("Placemarks");
-        var latitude = 47.684444;
-        var longitude = -121.129722;
-
-        // Set up the common placemark attributes.
-        var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
-        placemarkAttributes.imageScale = 1;
-        placemarkAttributes.imageOffset = new WorldWind.Offset( WorldWind.OFFSET_FRACTION, 0.3, WorldWind.OFFSET_FRACTION, 0.0);
-        placemarkAttributes.imageColor = WorldWind.Color.WHITE;
-        placemarkAttributes.labelAttributes.offset = new WorldWind.Offset( WorldWind.OFFSET_FRACTION, 0.5, WorldWind.OFFSET_FRACTION, 1.0);
-        placemarkAttributes.labelAttributes.color = WorldWind.Color.YELLOW;
-        placemarkAttributes.drawLeaderLine = true;
-        placemarkAttributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
+        var latitude = 41.324444;
+        var longitude = -74.225722;
 
 
         // Create the placemark and its label.
-        var placemark;
-        placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 100), true, null);
+        var placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 100), true, null);
         placemark.label = "My placemark" + "\n" + "Lat " + placemark.position.latitude.toPrecision(4).toString() + "\n" + "Lon " + placemark.position.longitude.toPrecision(5).toString();
         placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
 
-        // Create the placemark attributes for this placemark. Note that the attributes differ only by their
-        // image URL.
-        placemarkAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
+        // Set up the common placemark attributes.
+        var placemarkAttributes = new WorldWind.PlacemarkAttributes(null);
+        placemarkAttributes.imageScale = 0.1;
+        placemarkAttributes.imageOffset = new WorldWind.Offset( WorldWind.OFFSET_FRACTION, 0.3, WorldWind.OFFSET_FRACTION, 0.0);
+        placemarkAttributes.labelAttributes.offset = new WorldWind.Offset( WorldWind.OFFSET_FRACTION, 0.5, WorldWind.OFFSET_FRACTION, 1.0);
+        placemarkAttributes.drawLeaderLine = true;
+        placemarkAttributes.leaderLineAttributes.outlineColor = WorldWind.Color.RED;
         placemarkAttributes.imageSource = "https://i.imgur.com/f3d66UH.png";
         placemark.attributes = placemarkAttributes;
-
-
-        highlightAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
-        highlightAttributes.imageScale = 1.2;
-    placemark.highlightAttributes = highlightAttributes;
 
         // Add the placemark to the layer.
         placemarkLayer.addRenderable(placemark);
