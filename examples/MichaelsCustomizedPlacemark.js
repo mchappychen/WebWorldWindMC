@@ -13,29 +13,7 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
 
         // Define the images we'll use for the placemarks.
-        var images = [
-            "plain-black.png",
-            "plain-blue.png",
-            "plain-brown.png",
-            "plain-gray.png",
-            "plain-green.png",
-            "plain-orange.png",
-            "plain-purple.png",
-            "plain-red.png",
-            "plain-teal.png",
-            "plain-white.png",
-            "plain-yellow.png",
-            "castshadow-black.png",
-            "castshadow-blue.png",
-            "castshadow-brown.png",
-            "castshadow-gray.png",
-            "castshadow-green.png",
-            "castshadow-orange.png",
-            "castshadow-purple.png",
-            "castshadow-red.png",
-            "castshadow-teal.png",
-            "castshadow-white.png"
-        ];
+        // https://i.imgur.com/f3d66UH.png
 
         var pinLibrary = WorldWind.configuration.baseUrl + "images/pushpins/"; // location of the image files for the pins
         var placemark;
