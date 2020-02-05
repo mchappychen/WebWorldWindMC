@@ -16,9 +16,8 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
 
         //create the layer for the placemark
         var placemarkLayer = new WorldWind.RenderableLayer("Placemarks");
-        var latitude = 41.324444;
-        var longitude = -74.225722;
-
+        var latitude = 41.4532221;
+        var longitude = -74.4375256;
 
         // Create the placemark and its label.
         var placemark = new WorldWind.Placemark(new WorldWind.Position(latitude, longitude, 100), true, null);
@@ -38,10 +37,22 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         // Add the placemark to the layer.
         placemarkLayer.addRenderable(placemark);
 
-
         // Add the placemarks layer to the WorldWindow's layer list.
         wwd.addLayer(placemarkLayer);
 
+
+        textLayer = new WorldWind.RenderableLayer("Popups");
+        var handleClick = function(o){
+                var pickList = wwd.pick(wwd.canvasCoordinates(o.clientX, o.clientY));
+                if(pickList.objects.length > 1) {
+                        console.log(pickList.objects[0]);
+                        var text = new WorldWind.GeographicText(pickList.objects[0].position, "Sample Text");
+                        textLayer.addRenderable(text);
+                }
+        }
+        wwd.addLayer(textLayer);
+
+        wwd.addEventListener("click", handleClick);
 
         // Create a layer manager for controlling layer visibility.
         var layerManager = new LayerManager(wwd);
