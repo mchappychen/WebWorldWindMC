@@ -41,16 +41,25 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         wwd.addLayer(placemarkLayer);
 
 
-        textLayer = new WorldWind.RenderableLayer("Popups");
+        popupLayer = new WorldWind.RenderableLayer("Popups");
         var handleClick = function(o){
                 var pickList = wwd.pick(wwd.canvasCoordinates(o.clientX, o.clientY));
-                if(pickList.objects.length > 1) {
-                        console.log(pickList.objects[0]);
-                        var text = new WorldWind.GeographicText(pickList.objects[0].position, "Sample Text");
-                        textLayer.addRenderable(text);
+                for(let i=0;i<pickList.objects.length;i++){
+                        if(pickList.objects[i].userObject instanceof WorldWind.Placemark){
+                                alert("You clicked on a placemark");
+                                var annotation = new WorldWind.Annotation(pickList.objects[i].position,null);
+                                annotation.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
+                                annotation.displayName = "Placemark Clicked";
+                                annotation.enabled = true;
+                                annotation.position = pickList.objects[i].position;
+                                annotation.position.altitude = 200;
+                                annotation.text = "A normal text";
+                                popupLayer.addRenderable(annotation);
+                                console.log(annotation);
+                        }
                 }
         }
-        wwd.addLayer(textLayer);
+        wwd.addLayer(popupLayer);
 
         wwd.addEventListener("click", handleClick);
 
