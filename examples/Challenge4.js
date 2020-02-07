@@ -1,8 +1,9 @@
-/** Michael's Placemark thing */
+/** Make drop down menu by using accordion method via bootstrap library. Thye drop down menu will have at least 2 sub levels. There will be a toggle switch next to the bottom level of the menu, that will show/hide the placemark layer */
 
 requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         './LayerManager'],         //Makes the buttons on the left do something with the LayerManager object
     function (WorldWind, LayerManager) {
+
 
 
         var wwd = new WorldWind.WorldWindow("canvasOne");
