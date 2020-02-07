@@ -40,24 +40,47 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         // Add the placemarks layer to the WorldWindow's layer list.
         wwd.addLayer(placemarkLayer);
 
+        let pickedItems = [];
 
         popupLayer = new WorldWind.RenderableLayer("Popups");
         var handleClick = function(o){
                 var pickList = wwd.pick(wwd.canvasCoordinates(o.clientX, o.clientY));
-                for(let i=0;i<pickList.objects.length;i++){
-                        if(pickList.objects[i].userObject instanceof WorldWind.Placemark){
-                                alert("You clicked on a placemark");
-                                var annotation = new WorldWind.Annotation(pickList.objects[i].position,null);
-                                annotation.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
-                                annotation.displayName = "Placemark Clicked";
-                                annotation.enabled = true;
-                                annotation.position = pickList.objects[i].position;
-                                annotation.position.altitude = 200;
-                                annotation.text = "A normal text";
-                                popupLayer.addRenderable(annotation);
-                                console.log(annotation);
+                if(pickedItems.length > 0){
+                        pickedItems[0].enabled = false;
+                        pickedItems = [];
+                        wwd.redraw();
+                } else {
+                        for(let i=0;i<pickList.objects.length;i++){
+                                if(pickList.objects[i].userObject instanceof WorldWind.Placemark){
+                                        if(pickedItems.length > 0){
+                                                pickedItems[0].enabled = false;
+                                                pickedItems = [];
+                                        } else {
+                                                var annotationAttributes = new WorldWind.AnnotationAttributes(null);
+                                                annotationAttributes.cornerRadius = 14;
+                                                annotationAttributes.backgroundColor = WorldWind.Color.BLUE;
+                                                annotationAttributes.drawLeader = true;
+                                                annotationAttributes.leaderGapWidth = 40;
+                                                annotationAttributes.leaderGapHeight = 50;
+                                                annotationAttributes.opacity = 1;
+                                                annotationAttributes.scale = 1;
+                                                annotationAttributes.width = 200;
+                                                annotationAttributes.height = 100;
+                                                annotationAttributes.textAttributes.color = WorldWind.Color.WHITE;
+                                                annotationAttributes.insets = new WorldWind.Insets(10, 10, 10, 10);
+                                                // Set a location for the annotation to point to and create it.
+                                                var location = pickList.objects[i].position;
+                                                var annotation = new WorldWind.Annotation(location, annotationAttributes);
+                                                // Text can be assigned to the annotation after creating it.
+                                                annotation.label = "Sample popup with text here";
+                                                pickedItems.push(annotation);
+                                                popupLayer.addRenderable(annotation);
+                                        }
+                                }
                         }
                 }
+
+
         }
         wwd.addLayer(popupLayer);
 
@@ -66,3 +89,6 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         // Create a layer manager for controlling layer visibility.
         var layerManager = new LayerManager(wwd);
     });
+
+
+
