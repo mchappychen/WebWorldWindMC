@@ -1,4 +1,4 @@
-/** Michael's Placemark thing */
+0/** Michael's Placemark thing */
 
 requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         './LayerManager'],         //Makes the buttons on the left do something with the LayerManager object
