@@ -60,6 +60,17 @@ requirejs(['./WorldWindShim',
             var configuration = {};
 
             if (geometry.isPointType() || geometry.isMultiPointType()) {
+
+                if(geometry.isMultiPointType()){
+                    console.log(geometry,properties);
+                    var heatMapPoints = [];
+                    for(var i=0;i<geometry._coordinates.length;i++){
+                        heatMapPoints.push(new WorldWind.MeasuredLocation(geometry._coordinates[i][0],geometry._coordinates[i][1],Math.ceil(100 * Math.random())));
+                    }
+                    console.log(heatMapPoints);
+                    wwd.addLayer(new WorldWind.HeatMapLayer("HeatMap", heatMapPoints));
+                }
+
                 configuration.attributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
 
                 if (properties && (properties.name || properties.Name || properties.NAME)) {

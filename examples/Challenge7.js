@@ -7,6 +7,7 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
 
 
         var wwd = new WorldWind.WorldWindow("canvasOne");
+        wwd.addLayer(new WorldWind.BMNGLayer());
         wwd.addLayer(new WorldWind.BingAerialWithLabelsLayer(null));
         wwd.addLayer(new WorldWind.AtmosphereLayer());
         wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
@@ -102,46 +103,47 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
         }
 
 
-            // Web Map Service information from NASA's Near Earth Observations WMS
-            var serviceAddress = "http://10.11.90.15:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities";
-            // Named layer displaying Average Temperature data
-            var layerName = "Michael:MichaelLayerGroup";
 
-            var wmsLayer;
+        // Web Map Service information from NASA's Near Earth Observations WMS
+        var serviceAddress = "http://10.11.90.15:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities";
+        // Named layer displaying Average Temperature data
+        var layerName = "Michael:MichaelLayerGroup";
 
-            // Called asynchronously to parse and create the WMS layer
-            var createLayer = function (xmlDom) {
-                    // Create a WmsCapabilities object from the XML DOM
-                    var wms = new WorldWind.WmsCapabilities(xmlDom);
-                    // Retrieve a WmsLayerCapabilities object by the desired layer name
-                    var wmsLayerCapabilities = wms.getNamedLayer(layerName);
-                    // Form a configuration object from the WmsLayerCapability object
-                    var wmsConfig = WorldWind.WmsLayer.formLayerConfiguration(wmsLayerCapabilities);
-                    // Modify the configuration objects title property to a more user friendly title
-                    wmsConfig.title = "Average Surface Temp";
-                    // Create the WMS Layer from the configuration object
-                    wmsLayer = new WorldWind.WmsLayer(wmsConfig);
+        var wmsLayer;
 
-                    // Add the layers to WorldWind and update the layer manager
-                    wwd.addLayer(wmsLayer);
-                    layerManager.synchronizeLayerList();
-            };
+        // Called asynchronously to parse and create the WMS layer
+        var createLayer = function (xmlDom) {
+            // Create a WmsCapabilities object from the XML DOM
+            var wms = new WorldWind.WmsCapabilities(xmlDom);
+            // Retrieve a WmsLayerCapabilities object by the desired layer name
+            var wmsLayerCapabilities = wms.getNamedLayer(layerName);
+            // Form a configuration object from the WmsLayerCapability object
+            var wmsConfig = WorldWind.WmsLayer.formLayerConfiguration(wmsLayerCapabilities);
+            // Modify the configuration objects title property to a more user friendly title
+            wmsConfig.title = "Average Surface Temp";
+            // Create the WMS Layer from the configuration object
+            wmsLayer = new WorldWind.WmsLayer(wmsConfig);
 
-            // Called if an error occurs during WMS Capabilities document retrieval
-            var logError = function (jqXhr, text, exception) {
-                    console.log("There was a failure retrieving the capabilities document: " + text + " exception: " + exception);
-            };
+            // Add the layers to WorldWind and update the layer manager
+            wwd.addLayer(wmsLayer);
+            layerManager.synchronizeLayerList();
+        };
 
-            $.get(serviceAddress).done(createLayer).fail(logError);
+        // Called if an error occurs during WMS Capabilities document retrieval
+        var logError = function (jqXhr, text, exception) {
+            console.log("There was a failure retrieving the capabilities document: " + text + " exception: " + exception);
+        };
+
+        $.get(serviceAddress).done(createLayer).fail(logError);
 
         var handleClick = function(o){
                 var pickList = wwd.pick(wwd.canvasCoordinates(o.clientX, o.clientY));
-                        for(let i=0;i<pickList.objects.length;i++){
-                                if(pickList.objects[i].userObject instanceof WorldWind.Placemark){
-                                        var modal = document.getElementById(pickList.objects[i].userObject.label);
-                                        modal.style.display = "block";
-                                }
+                for(let i=0;i<pickList.objects.length;i++){
+                        if(pickList.objects[i].userObject instanceof WorldWind.Placemark){
+                                var modal = document.getElementById(pickList.objects[i].userObject.label);
+                                modal.style.display = "block";
                         }
+                }
         }
         wwd.addEventListener("click", handleClick);
 
@@ -150,6 +152,33 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
                 wmsLayer.enabled = !wmsLayer.enabled;
                 wwd.redraw();
         };
+
+
+/*
+                var heatMapPoints = [];
+                for(var i=0;i<geometry._coordinates.length;i++){
+                    heatMapPoints.push(new WorldWind.MeasuredLocation(lat,long,intensity));
+                }
+                wwd.addLayer(new WorldWind.HeatMapLayer("HeatMap", heatMapPoints));
+
+*/
+
+        var bob =  function(csv){
+                console.log(csv);
+        }
+        var logError = function(a,b,c){console.log(a,b,c)}
+        //$.get("http://michaelisawesome.epizy.com/Confirmed_13Feb20_2115.csv").done(bob).fail(logError);
+       //$.getJSON("http://michaelisawesome.epizy.com/Confirmed_13Feb20_2115.csv",function(x){console.log(x)});
+            $.ajax({
+                    type: "GET",
+                    url: "http://michaelisawesome.epizy.com/Confirmed_13Feb20_2115",
+                    dataType: "text",
+                    success: function(response)
+                    {
+                            console.log(response);
+                    }
+            });
+
 
         // Create a layer manager for controlling layer visibility.
         var layerManager = new LayerManager(wwd);

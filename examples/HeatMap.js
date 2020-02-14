@@ -54,7 +54,7 @@ requirejs(['./WorldWindShim',
                 )
             );
         }
-
+        console.log(locations);
         // Add new HeatMap Layer with the points as the data source.
         wwd.addLayer(new WorldWind.HeatMapLayer("HeatMap", locations));
 
