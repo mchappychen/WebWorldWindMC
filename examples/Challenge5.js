@@ -103,9 +103,9 @@ requirejs(['./WorldWindShim',      //Gets WorldWind object from WorldWind.js
 
 
             // Web Map Service information from NASA's Near Earth Observations WMS
-            var serviceAddress = "https://neo.sci.gsfc.nasa.gov/wms/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0";
+            var serviceAddress = "http://10.11.90.15:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities";
             // Named layer displaying Average Temperature data
-            var layerName = "MOD_LSTD_CLIM_M";
+            var layerName = "Michael:MichaelLayerGroup";
 
             var wmsLayer;
 
